@@ -45,6 +45,7 @@ public class Contact {
         this.id = id;
     }
 
+    @Column
     private String name;
 
     public Contact() {

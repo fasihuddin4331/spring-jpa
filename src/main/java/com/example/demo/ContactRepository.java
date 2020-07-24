@@ -9,6 +9,8 @@ public interface ContactRepository extends CrudRepository<Contact, Integer> {
 
 	public Contact findByEmail(String email);
 	
-	@Query
+	@Query("from com.example.demo.Contact c join c.placeEntities p where p.placeName=:name")
 	public List<Contact> findByPlaceName(String name);
+	
+	public List<Contact> findByNameAndEmail(String name,String email);
   }

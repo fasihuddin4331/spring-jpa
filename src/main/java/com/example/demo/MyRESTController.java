@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,10 +21,11 @@ public class MyRESTController {
 	@Autowired
 	PlaceReository placeRepo;
 
+	//It will return the data to display on html page
 	@GetMapping("/contacts")
 	public ResponseEntity<List<Contact> > getContacts() {
 		 List<Contact> list = (List<Contact>) repository.findAll();
-		 return new ResponseEntity(list,HttpStatus.OK);
+		 return new ResponseEntity<List<Contact>>(list,HttpStatus.OK);
 	}
 
 	@PostMapping("/contacts")
@@ -40,7 +42,7 @@ public class MyRESTController {
 				repository.delete(contact);
 				return new ResponseEntity<String>("Contact Details Deleted Success Fully",HttpStatus.OK);
 			}else {
-				return new ResponseEntity<String>("No ConTact Found with this id",HttpStatus.CREATED);
+				return new ResponseEntity<String>("No ConTact Found with this email ::"+email,HttpStatus.NOT_FOUND);
 			}
 			
 		} catch (Exception e) {
@@ -49,10 +51,21 @@ public class MyRESTController {
 		
 	}
 	
-	/*@GetMapping("/contacts/byPlaceName/{placeName}")
-	public ResponseEntity<List<Contact> > getByPlaceName(@PathVariable String placeName) {
-		
-		 return new ResponseEntity(list,HttpStatus.OK);
+	// It will search the data on the basis of name and email
+	@GetMapping("/contacts/search")
+	public ResponseEntity<List<Contact> > getContactSearchedList(
+			@RequestParam("name") String name,
+			@RequestParam("email")String email
+			) {
+		 List<Contact> list = (List<Contact>) repository.findByNameAndEmail(name, email);
+		 return new ResponseEntity<List<Contact>>(list,HttpStatus.OK);
 	}
-*/
+	
+	@GetMapping("/contacts/byPlaceName/{placeName}")
+	public ResponseEntity<List<Contact> > getByPlaceName(@PathVariable String placeName) {
+		List<Contact> list = repository.findByPlaceName(placeName);
+		
+		 return new ResponseEntity<List<Contact>>(list,HttpStatus.OK);
+	}
+
 }
