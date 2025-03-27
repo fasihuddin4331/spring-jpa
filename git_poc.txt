@@ -1,3 +1,7 @@
 Hi how are you 
 Some changes Added
+<<<<<<< Updated upstream
 Now changes in master
+=======
+now changes in git_poc
+>>>>>>> Stashed changes
